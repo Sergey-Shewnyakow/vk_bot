@@ -1,4 +1,4 @@
-from config import *
+from configg import *
 from temp_word import *
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
@@ -118,5 +118,10 @@ class VkBot:
                     if list(set(word_text_msg) & set(stop_word)) != []:
                         self.save_msg(user_id, text_msg)
 
-                    if "/помоги" in word_text_msg:
+                    if "/чат" in word_text_msg:
                         self.question_gpt(text_msg, chat_id, user_id)
+                    if text_msg == "/help":
+                        self.sender(chat_id, user_id, "Я бот для помощи в модерации беседы\n"
+                                                      "Мои команды:"
+                                                      "\n /help - список команд"
+                                                      "\n /чат + (ваш вопрос) - для отправки вопроса к chat-gpt")
