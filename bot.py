@@ -115,13 +115,15 @@ class VkBot:
                         self.sender(chat_id, user_id, f"{user_name}, при мне так не выражайтесь!")
                         self.warns(user_id,chat_id,user_name)
                         self.delete_msg(id_msg, peer_id = msg['peer_id'])
+
+
                     if list(set(word_text_msg) & set(stop_word)) != []:
                         self.save_msg(user_id, text_msg)
 
                     if "/чат" in word_text_msg:
                         self.question_gpt(text_msg, chat_id, user_id)
                     if text_msg == "/help":
-                        self.sender(chat_id, user_id, "Я бот для помощи в модерации беседы\n"
+                        self.sender(chat_id, user_id, "Я черепашка ботик для помощи в модерации беседы\n"
                                                       "Мои команды:"
                                                       "\n /help - список команд"
                                                       "\n /чат + (ваш вопрос) - для отправки вопроса к chat-gpt")
