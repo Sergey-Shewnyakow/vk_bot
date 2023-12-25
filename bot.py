@@ -35,6 +35,18 @@ class VkBot:
         msg_s = utils.get_user_by_msg(id, msg)
         msg_s.save()
 
+    def save_imp_msg(self, id, msg):
+        imp_msg = utils.set_imp_msg(id, msg)
+        imp_msg.save()
+
+    def get_imp_msg(self):
+        all_msgs = utils.get_all_imp_msgs()
+        print(all_msgs)
+        return all_msgs
+
+    def del_imp_msg(self, id):
+        imp_msg = utils.delete_imp_msg_by_id(id)
+        imp_msg.save()
 
     def delete_user(self,chat_id, user_id):
         self.vk_session.method("messages.removeChatUser", {'chat_id': chat_id, 'user_id': user_id})
@@ -44,7 +56,7 @@ class VkBot:
         fwd_user = utils.get_user_ny_id(id)
         fwd_user.warns += 1
         fwd_user.save()
-        self.sender(chat_id, id, f"{user_name}, вам выдано предупреждение!\nВсего предупреждений {fwd_user.warns}/5")
+        self.sender(chat_id, id, f"@id{id}, вам выдано предупреждение!\nВсего предупреждений {fwd_user.warns}/5")
         if fwd_user.warns >= 5:
             self.delete_user(chat_id,id)
 
@@ -52,7 +64,7 @@ class VkBot:
         fwd_user = utils.get_user_ny_id(id)
         fwd_user.warns -= 1
         fwd_user.save()
-        self.sender(chat_id, id, f"{user_name}, у вас снято 1 предупреждение!\nВсего предупреждений {fwd_user.warns}/5")
+        self.sender(chat_id, id, f"@id{id}, у вас снято 1 предупреждение!\nВсего предупреждений {fwd_user.warns}/5")
 
 
     def question_gpt(self, text, chat_id, user_id):
@@ -108,11 +120,12 @@ class VkBot:
 
 
 
+
                     if text_msg in temp_greeting:
                         self.sender(chat_id, user_id, f"{user_name}, привет!")
 
                     if list(set(word_text_msg) & set(abusive_language)) != []:
-                        self.sender(chat_id, user_id, f"{user_name}, при мне так не выражайтесь!")
+                        self.sender(chat_id, user_id, f"{user_name} , при мне так не выражайтесь!")
                         self.warns(user_id,chat_id,user_name)
                         self.delete_msg(id_msg, peer_id = msg['peer_id'])
 
@@ -127,3 +140,17 @@ class VkBot:
                                                       "Мои команды:"
                                                       "\n /help - список команд"
                                                       "\n /чат + (ваш вопрос) - для отправки вопроса к chat-gpt")
+
+                    if "+важное" in text_msg[0:7:]:
+                        if user_id == admin_id:
+                            self.save_imp_msg(user_id, text_msg)
+
+                    if "-важное" in text_msg:
+                        if user_id == admin_id:
+                            del_id = int(text_msg[-1])
+                            self.del_imp_msg(del_id)
+
+
+                    if text_msg == "/важное":
+                        print_msg = self.get_imp_msg()
+                        self.sender(chat_id, user_id, f"{print_msg}")

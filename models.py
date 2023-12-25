@@ -1,3 +1,5 @@
+import datetime
+
 from peewee import *
 
 db = SqliteDatabase('data.db')
@@ -17,5 +19,13 @@ class Msg(Model):
     vk_id = IntegerField()
     msg = TextField()
 
+class Imp_Msg(Model):
+    class Meta:
+        database = db
+        db_table = 'Imp_Msg'
+    vk_id = IntegerField()
+    msg = TextField()
+    timestamp = DateTimeField(default=datetime.datetime.now)
+
 if __name__ == '__main__':
-    db.create_tables([User, Msg])
+    db.create_tables([User, Msg, Imp_Msg])
