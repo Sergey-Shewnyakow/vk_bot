@@ -5,13 +5,13 @@
 * Python 3.11
 * SQLite
 * vk_api
-
+* g4f
 
 ## Установка
 
 1. Склонировать к себе https://github.com/Sergey-Shewnyakow/vk_bot
 2. В проекте создать файл .env и указать токен "TOKEN= (ваш токен беседы)"
-3. В файле configg.py admin_id
+3. В файле configg.py измените admin_id на id администратора
 4. Запустить файл main.py
 
 ## Команды для бота
